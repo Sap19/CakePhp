@@ -19,15 +19,13 @@
     <?= $this->Form->create($category) ?>
     <fieldset>
         <legend><?= __('Add Category') ?></legend>
-        <?php
-            echo $this->Form->control('parent_id', [
+        
+            <?= $this->Form->control('parent_id', [
                 'options' => $parentCategories,
                 'empty' => 'No parent category'
-            ]);
-            echo $this->Form->control('name');
-            echo $this->Form->control('description');
-           
-        ?>
+            ]); ?>
+            <?= $this->Form->control('name'); ?>
+            <?= $this->Form->control('description'); ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
