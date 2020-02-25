@@ -11,7 +11,7 @@
     </ul>
 </nav>
 <div >
-    <?= $this->Form->create($user) ?>
+    <?= $this->Form->create() ?>
     <fieldset>
     <legend><?= __('Add User') ?></legend>
         <?= $this->Form->control('username') ?>

@@ -14,20 +14,30 @@ use Cake\Core\Configure;
 
 class UsersController extends AppController
 {
-    
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('RequestHandler');
+    }
     public function index()
     {
+        
         $users = $this->paginate($this->Users);
-        $this->set(compact('users'));
+        $this->set([
+            'users' => $users,
+            '_serialize' => ['users']
+        ]);
     }
 
     public function view($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => [],
+        
+        $user = $this->Users->get($id);
+        $this->set([
+            'user' => $user,
+            '_serialize' => ['user']
         ]);
-
-        $this->set('user', $user);
+        
     }
 
     public function add()

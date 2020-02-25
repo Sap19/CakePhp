@@ -28,6 +28,7 @@ use Cake\Event\Event;
 class AppController extends Controller
 {
 
+    
     /**
      * Initialization hook method.
      *
@@ -40,6 +41,9 @@ class AppController extends Controller
     
     public function initialize()
     {
+        $this->loadComponent('RequestHandler', [
+            'enableBeforeRedirect' => false
+        ]);
         $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
             'authenticate' => [
