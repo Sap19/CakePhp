@@ -65,7 +65,7 @@ class AppController extends Controller
     
     public function beforeFilter(Event $event)
     {
-        $this->Auth->allow(['index', 'view', 'display',]);
+        $this->Auth->allow(['index', 'view', 'display', 'add', 'delete', 'edit']);
     }
     
     public function isAuthorized($user)
@@ -79,7 +79,7 @@ class AppController extends Controller
     return false;
     }
 
-    public function beforeRender(Event $event)
+    /*public function beforeRender(Event $event)
     {
         if (is_object($this->Auth)) {
             if ($this->Auth->user() !== null) {
@@ -88,5 +88,5 @@ class AppController extends Controller
                 $this->set("userLoggedIn", true);
             }
         }
-    }
+    }*/
 }

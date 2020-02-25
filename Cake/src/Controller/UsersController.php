@@ -23,6 +23,7 @@ class UsersController extends AppController
     {
         
         $users = $this->paginate($this->Users);
+        
         $this->set([
             'users' => $users,
             '_serialize' => ['users']
@@ -87,9 +88,11 @@ class UsersController extends AppController
 
     public function login()
     {
-        if ($this->request->is('post')) {
+        if ($this->request->is('post')) 
+        {
             $user = $this->Auth->identify();
-            if ($user) {
+            if ($user) 
+            {
                 $this->Auth->setUser($user);
                 if ($user['role'] !== 'admin')
                 {
@@ -99,13 +102,14 @@ class UsersController extends AppController
                 {
                 return $this->redirect(['controller' => 'users' , 'action' => 'index']);
                 }
-                
             }
-            $this->Flash->error(__('Invalid username or password, try again'));
+             $this->Flash->error(__('Invalid username or password, try again'));    
         }
-        
-        
+           
     }
+        
+        
+    
     public function logout()
     {
         $this->Flash->success('You Are Logged Out');

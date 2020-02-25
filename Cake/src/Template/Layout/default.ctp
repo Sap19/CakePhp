@@ -2,7 +2,11 @@
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
+ *<?php if($userLoggedIn) : ?>
+                *<li><?= $this->Html->link('SignUp', ['controller' => 'users' , 'action' => 'signup']); ?></li>
+                *<?php else: ?>
+                *<li><?= $this->Html->link('Logout', ['controller' => 'users' , 'action' => 'logout']); ?></li>
+                *<?php endif; ?>
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
@@ -42,11 +46,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <?php if($userLoggedIn) : ?>
-                <li><?= $this->Html->link('SignUp', ['controller' => 'users' , 'action' => 'signup']); ?></li>
-                <?php else: ?>
-                <li><?= $this->Html->link('Logout', ['controller' => 'users' , 'action' => 'logout']); ?></li>
-                <?php endif; ?>
+                
             </ul>
         </div>
     </nav>
