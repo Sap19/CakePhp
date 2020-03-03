@@ -20,8 +20,7 @@ class UsersController extends AppController
     {
         parent::initialize();
         $this->loadComponent('RequestHandler');
-        $this->Auth-> allow(['signup' , 'logout', 'forgotPassword', 'resetPassword']);
-        $this->Auth->allow(['apiLog', 'token']);
+        $this->Auth-> allow(['signup' , 'logout', 'forgotPassword', 'resetPassword','apiLog', 'apiAdd']);
     }
     public function index()
     {
@@ -47,15 +46,30 @@ class UsersController extends AppController
 
     public function add()
     {
+        $userId = $this->Auth->user('role');
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            if($userId == 'admin')
+            {
+                if ($this->Users->save($user)) {
+                    $this->Flash->success(__('The user has been saved.'));
+    
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            else
+            {
+                $user->role = 'author';
+                if ($this->Users->save($user)) 
+                {
+                    $this->Flash->success(__('The user has been saved.'));
+
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
         }
         $this->set(compact('user'));
     }
@@ -266,5 +280,28 @@ class UsersController extends AppController
             }
         }
     }
-
+    public function apiAdd()
+    {
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($this->Users->save($user)) {
+                $this->set([
+                    'success' => true,
+                    'data' => [
+                        'token' => JWT::encode([
+                            'sub' => $user['id'],
+                            'exp' =>  time() + 3600, // 1 hour
+                            'role' => $user['role']
+                        ],
+                        Security::getSalt())
+                    ],
+                    '_serialize' => ['success', 'data']
+                ]);
+            }
+            throw new UnauthorizedException('Failed User with that username or email already exsist');
+        }
+        $this->set(compact('user'));
+        
+    }
 }

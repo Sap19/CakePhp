@@ -38,7 +38,7 @@ class ArticlesController extends AppController
 
         $article = $this->Articles->get($id);
        
-            
+        
     }
     public function add()
     {
@@ -84,23 +84,25 @@ class ArticlesController extends AppController
             $this->Flash->success(__('The article id: {0} has been deleted!', h($id)));
             return $this->redirect(['action' => 'index']);
         }
+        
     }
     public function isAuthorized($user)
     {
-
-    if ($this->request->getParam('action') === 'add') {
-        return true;
-    }
-    
-    if (in_array($this->request->getParam('action'), ['edit', 'delete'])) 
-    {
-        $articleId = (int)$this->request->getParam('pass.0');
-        if ($this->Articles->isOwnedBy($articleId, $user['id'])) {
+   
+        if ($this->request->getParam('action') === 'add') {
             return true;
         }
-    }
 
-    return parent::isAuthorized($user);
+    
+        if (in_array($this->request->getParam('action'), ['edit', 'delete'])) {
+        
+            $articleId = (int)$this->request->getParam('pass.0');
+            if ($this->Articles->isOwnedBy($articleId, $user['id'])) {
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
     }
     
 }

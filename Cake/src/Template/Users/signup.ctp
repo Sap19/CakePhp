@@ -14,7 +14,7 @@
                 <?= $this->Form->control('email') ?>
                 <?= $this->Form->control('password') ?>
                 <?= $this->Form->control('role', [
-                'options' => ['admin' => 'Admin', 'author' => 'Author']
+                'options' => [ 'author' => 'Author']
                 ]) ?>
         </fieldset>
         <?= $this->Form->button(__('Sign Up')); ?>

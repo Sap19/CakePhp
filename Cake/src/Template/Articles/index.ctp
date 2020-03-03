@@ -12,6 +12,7 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('category')?></th>
+                <th><?= $this->Paginator->sort('Author')?></th>
                 <th class="actions"><?= __('Actions') ?></th>
                 <th><?= $this->Paginator->sort('created') ?></th>
                 <th><?= $this->Paginator->sort('modified') ?></th>
@@ -28,7 +29,9 @@
         <td>
             <?= $article->category->name ?>
         </td>
-        
+        <td>
+            <?= $article->user->username ?>
+        </td>
         <td>
             <?= $this->Form->postLink(
                 'Delete',

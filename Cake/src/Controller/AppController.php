@@ -45,14 +45,45 @@ class AppController extends Controller
             'enableBeforeRedirect' => false
         ]);
         $this->loadComponent('Flash');
+        if ($this->request->getHeaderLine("accept") == "application/json")
+        {
+            
+            $this->loadComponent('Auth', [
+                'storage' => 'Memory',
+                'authorize' => 'Controller',
+                'authenticate' => [
+                    'Form' => [
+                        'fields' => [
+                            'username' => 'username',
+                            'password' => 'password'
+                        ],
+                    ],
+                    'ADmad/JwtAuth.Jwt' => [
+                            'parameter' => 'token',
+                            'userModel' => 'Users',
+                                
+                            'fields' => [
+                                'username' => 'id'
+                            ],
+                            'queryDatasource' => true
+                        ]
+                    ],
+                    'unauthorizedRedirect' => false,
+                    //'checkAuthIn' => 'Controller.initialize'      
+            ]);
+        }
+        else
+        {
         $this->loadComponent('Auth', [
+            
+            'authorize' => 'Controller',
             'authenticate' => [
                 'Form' => [
                     'fields' => [
                         'username' => 'username',
                         'password' => 'password'
-                                ]
                     ],
+                ],
                 'ADmad/JwtAuth.Jwt' => [
                         'parameter' => 'token',
                         'userModel' => 'Users',
@@ -64,15 +95,15 @@ class AppController extends Controller
                     ]
                 ],
                 'unauthorizedRedirect' => false,
-                'checkAuthIn' => 'Controller.initialize'      
+                //'checkAuthIn' => 'Controller.initialize'      
         ]);
-        
+            }
     }
     
     
     public function beforeFilter(Event $event)
     {
-        $this->Auth->allow(['index', 'view', 'display', 'add', 'delete', 'edit']);
+        $this->Auth->allow(['index', 'view', 'display']);
     }
     
     public function isAuthorized($user)

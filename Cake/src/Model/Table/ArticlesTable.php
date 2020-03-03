@@ -29,6 +29,6 @@ class ArticlesTable extends Table
     
     public function isOwnedBy($articleId, $userId)
     {
-        return $this->exists(['id' => $articleId, 'user_id' => $userId]);
+    return $this->exists(['id' => $articleId, 'user_id' => $userId]);
     }
 }
