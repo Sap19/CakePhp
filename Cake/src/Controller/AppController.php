@@ -52,14 +52,21 @@ class AppController extends Controller
                         'username' => 'username',
                         'password' => 'password'
                                 ]
-                        ]      
                     ],
-                    'loginAction' => [
-                        'controller' => 'Users',
-                        'action' => 'login'
-                    ],
-                    'authorize' => ['Controller'],
+                'ADmad/JwtAuth.Jwt' => [
+                        'parameter' => 'token',
+                        'userModel' => 'Users',
+                            
+                        'fields' => [
+                            'username' => 'id'
+                        ],
+                        'queryDatasource' => true
+                    ]
+                ],
+                'unauthorizedRedirect' => false,
+                'checkAuthIn' => 'Controller.initialize'      
         ]);
+        
     }
     
     

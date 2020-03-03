@@ -1,18 +1,32 @@
 <?php
 namespace App\Controller;
 
+use App\Controller\AppController;
+use Cake\Network\Exception\UnauthorizedException;
+use Cake\Utility\Security;
+use Firebase\JWT\JWT;
+
 class ArticlesController extends AppController
 {
-
+     public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('RequestHandler');
+        $this->Auth-> allow(['index', 'view']);
+    
+    
+    }
     
     public function index()
     {
         $this->paginate = [
             'contain' => ['Categories', 'Users']
         ];
-        $this->set('articles', $this->paginate($this->Articles));
-        $this->set('_serialize', ['articles']);
-        
+        $article = $this->paginate($this->Articles);
+        $this->set([
+            'articles' => $article,
+            '_serialize' => ['articles']
+        ]);
     }
     public function view($id = null)
     {
@@ -21,8 +35,10 @@ class ArticlesController extends AppController
             'contain' => ['Users']
         ]);
         $this->set(compact('article'));
-        
 
+        $article = $this->Articles->get($id);
+       
+            
     }
     public function add()
     {

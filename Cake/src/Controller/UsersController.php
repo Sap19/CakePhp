@@ -11,6 +11,8 @@ use Cake\Utility\Security;
 use Cake\Auth\DefaultPasswordHasher;
 use  Cake\I18n\FrozenTime;
 use Cake\Core\Configure;
+use Cake\Http\Exception\UnauthorizedException;
+use Firebase\JWT\JWT;
 
 class UsersController extends AppController
 {
@@ -18,6 +20,8 @@ class UsersController extends AppController
     {
         parent::initialize();
         $this->loadComponent('RequestHandler');
+        $this->Auth-> allow(['signup' , 'logout', 'forgotPassword', 'resetPassword']);
+        $this->Auth->allow(['apiLog', 'token']);
     }
     public function index()
     {
@@ -133,7 +137,7 @@ class UsersController extends AppController
     public function beforeFilter(Event $event)
     {
         $this->Auth-> allow(['signup' , 'logout', 'forgotPassword', 'resetPassword']);
-        
+    
        
     }
 
@@ -237,6 +241,30 @@ class UsersController extends AppController
         }
     }
 
-    
+    public function apiLog()
+    {
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) 
+            {
+            $this->set([
+                'success' => true,
+                'data' => [
+                    'token' => JWT::encode([
+                        'sub' => $user['id'],
+                        'exp' =>  time() + 3600, // 1 hour
+                        'role' => $user['role']
+                    ],
+                    Security::getSalt())
+                ],
+                '_serialize' => ['success', 'data']
+            ]);
+            }
+            else
+            {
+                throw new UnauthorizedException('Invalid username or password');
+            }
+        }
+    }
 
 }
