@@ -282,10 +282,21 @@ class UsersController extends AppController
     }
     public function apiAdd()
     {
-        $user = $this->Users->newEntity();
+    
+        $user = $this->Auth->identify();
+        
+        $newUser = $this->Users->newEntity();
+       
+
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
+           
+            $newUsers = $this->Users->patchEntity($newUser, $this->request->getData());
+        
+            if($user['role'] != "admin")
+            {
+                $newUsers->role = "author";
+            }
+            if ($this->Users->save($newUsers)) {
                 $this->set([
                     'success' => true,
                     'data' => [
@@ -299,7 +310,7 @@ class UsersController extends AppController
                     '_serialize' => ['success', 'data']
                 ]);
             }
-            throw new UnauthorizedException('Failed User with that username or email already exsist');
+            //throw new UnauthorizedException('Failed User with that username or email already exsist');
         }
         $this->set(compact('user'));
         

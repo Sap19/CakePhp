@@ -50,7 +50,7 @@ class AppController extends Controller
             
             $this->loadComponent('Auth', [
                 'storage' => 'Memory',
-                'authorize' => 'Controller',
+                'authorize' => ['Controller'],
                 'authenticate' => [
                     'Form' => [
                         'fields' => [
@@ -69,14 +69,14 @@ class AppController extends Controller
                         ]
                     ],
                     'unauthorizedRedirect' => false,
-                    //'checkAuthIn' => 'Controller.initialize'      
+                    'checkAuthIn' => 'Controller.initialize'      
             ]);
         }
         else
         {
         $this->loadComponent('Auth', [
             
-            'authorize' => 'Controller',
+            'authorize' => ['Controller'],
             'authenticate' => [
                 'Form' => [
                     'fields' => [
@@ -94,7 +94,7 @@ class AppController extends Controller
                         'queryDatasource' => true
                     ]
                 ],
-                'unauthorizedRedirect' => false,
+                //'unauthorizedRedirect' => false,
                 //'checkAuthIn' => 'Controller.initialize'      
         ]);
             }
@@ -117,7 +117,7 @@ class AppController extends Controller
     return false;
     }
 
-    /*public function beforeRender(Event $event)
+    public function beforeRender(Event $event)
     {
         if (is_object($this->Auth)) {
             if ($this->Auth->user() !== null) {
@@ -126,5 +126,5 @@ class AppController extends Controller
                 $this->set("userLoggedIn", true);
             }
         }
-    }*/
+    }
 }
